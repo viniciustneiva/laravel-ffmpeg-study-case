@@ -2,3 +2,14 @@ body {
     background-color: #1a1d20;
     color: azure;
 }
+
+.item-row {
+    border-top: 1px solid #515151 !important;
+    border-bottom: 1px solid #515151 !important;
+}
+
+.video-name {
+    p {
+        margin: 10px !important;
+    }
+}

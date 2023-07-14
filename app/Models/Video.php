@@ -12,9 +12,11 @@ class Video extends Model
     protected $table = 'video';
 
     protected $fillable = [
+        'id',
         'name',
         'size',
         'format',
         'path',
+        'url'
     ];
 }
