@@ -45,18 +45,23 @@
                             <div class="video-name" style="font-size: 23px"><p>Formato: {{$video->format}}</p></div>
                         </div>
                         <div class="w-100 item-row py-4">
+                            <input type="hidden" id="videoId" value="{{$video->id}}">
                             <div class="d-flex flex-column">
                                 <h1>Converter:</h1>
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <select class="form-control form-select w-25" name="format" id="format">
-                                        <option value="">Selecione</option>
-                                        <option value="mp4">MP4</option>
-                                        <option value="avi">AVI</option>
-                                        <option value="webm">WEBM</option>
-                                    </select>
-                                    <div class="float-right">
-                                        <div class="btn btn-primary">Converter</div>
-                                    </div>
+
+                                        <select class="form-control form-select w-25" name="format" id="format">
+                                            <option value="">Selecione</option>
+                                            <option value="ogg">OGG</option>
+                                            <option value="wmv">WMV</option>
+                                            <option value="x264">X264</option>
+                                            <option value="webm">WEBM</option>
+                                        </select>
+                                        <div class="float-right">
+                                            <div class="btn btn-primary" id="convert">Converter</div>
+                                        </div>
+
+
                                 </div>
                             </div>
                         </div>
@@ -70,7 +75,7 @@
                                     <option value="720">720p</option>
                                 </select>
                                 <div class="float-right">
-                                    <div class="btn btn-primary">Converter</div>
+                                    <div class="btn btn-primary">Comprimir</div>
                                 </div>
                             </div>
                         </div>
@@ -80,11 +85,23 @@
 
     </main>
 </body>
+<script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+
 <script>
     window.onload = function() {
-        document.querySelector('.close').addEventListener('click', function (){
-            document.querySelectorAll('.alert').forEach(item => {
-                item.style.display = 'none';
+
+
+        document.querySelector('#convert').addEventListener('click', function () {
+            event.preventDefault();
+            let format = document.querySelector('#format').value;
+            if(!format)
+                return
+
+            $.post('{!! url('/convert') !!}', {
+                'id': {!! $video->id !!},
+                'format': format
+            }).then(function (res) {
+                console.log(res)
             })
         })
     };

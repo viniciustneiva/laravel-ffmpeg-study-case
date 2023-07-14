@@ -22,3 +22,6 @@ Route::get('/remove/{id}', [VideoController::class, 'delete' ]);
 
 Route::get('/test/{id}', [VideoController::class, 'test' ]);
 
+
+Route::post('/convert', [VideoController::class, 'convert']);
+
