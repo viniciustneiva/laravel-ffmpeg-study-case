@@ -124,13 +124,14 @@ class VideoController extends Controller {
                     $randomName = 'videos/' .$fileName . '_formatted' .'.wmv';
                     $ffmpeg->inFormat(new \FFMpeg\Format\Video\WMV)
                         ->save($randomName);
+                    break;
                 default:
                     return back()
                         ->with('error','Não definir uma conversão para o formato: '. $format);
             }
             $end_time = microtime(true);
             $execution_time = ($end_time - $start_time);
-            return " Execution time of script = ".$execution_time." sec";
+            return "[" .$format."] Execution time of script = ".$execution_time." sec";
         }
         return back()
             ->with('error','Não é possível formatar o vídeo para o mesmo formato');
