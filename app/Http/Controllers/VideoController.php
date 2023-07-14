@@ -109,18 +109,24 @@ class VideoController extends Controller {
                     $randomName = 'videos/' .$fileName . '_formatted' . '.ogg';
                     $ffmpeg->inFormat(new \FFMpeg\Format\Video\Ogg)
                         ->save($randomName);
+                    break;
                 case "x264":
                     $randomName = 'videos/' .$fileName . '_formatted' .'.mkv';
                     $ffmpeg->inFormat(new \FFMpeg\Format\Video\X264)
                         ->save($randomName);
+                    break;
                 case "webm":
                     $randomName = 'videos/' .$fileName . '_formatted' .'.webm';
                     $ffmpeg->inFormat(new \FFMpeg\Format\Video\WebM)
                         ->save($randomName);
+                    break;
                 case "wmv":
                     $randomName = 'videos/' .$fileName . '_formatted' .'.wmv';
                     $ffmpeg->inFormat(new \FFMpeg\Format\Video\WMV)
                         ->save($randomName);
+                default:
+                    return back()
+                        ->with('error','Não definir uma conversão para o formato: '. $format);
             }
             $end_time = microtime(true);
             $execution_time = ($end_time - $start_time);
