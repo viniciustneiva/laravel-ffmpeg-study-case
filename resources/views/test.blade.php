@@ -89,6 +89,9 @@
 
                         <div class="d-flex justify-content-center align-items-center py-3">
                             <div class="btn btn-primary ffmpeg-button w-25" id="compress">Testar</div>
+                             <div class="btn btn-secondary w-25 mx-2 {{ $video->benchmarks ? '' : 'd-none' }}" id="export">
+                                 <a href="{!! url('/export')."/".$video->id !!}" style="color: white; text-decoration: none">Exportar CSV</a>
+                             </div>
                         </div>
                         <div class="w-100 item-row py-4">
                             @if($video->benchmarks)
@@ -102,7 +105,7 @@
                                                 <p>{{$benchmark->format ? "Formato: $benchmark->format" : "" }}</p>
                                                 <p>{{$benchmark->quality ? "Qualidade: $benchmark->quality".'p' : "" }}</p>
                                                 <p>{{$benchmark->bitrate ? "Bitrate: $benchmark->bitrate" : "" }}</p>
-                                                <p>Tempo gasto: {{$benchmark->time_spent}}</p>
+                                                <p>Tempo gasto: {{$benchmark->time_spent}} / {{\App\Models\Video::formatarTempo($benchmark->time_spent)}}</p>
                                             </div>
                                         </div>
                                     @endforeach
@@ -144,6 +147,13 @@
                 })
 
         });
+
+        document.querySelector('#export').addEventListener('click', function () {
+
+            $.get().then(function (res) {
+
+            })
+        })
     };
 </script>
 </html>

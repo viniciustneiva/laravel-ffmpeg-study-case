@@ -44,10 +44,6 @@ class Video extends Model
         return self::with('benchmarks')->select('video.*')->where('id', $id)->first();
     }
 
-    public static function convert($video) {
-
-    }
-
     public static function ffmpegResolver($video, $format, $quality, $bitrate): bool|array|\Illuminate\Http\RedirectResponse
     {
         $ffmpeg = FFMpeg::fromFilesystem(Storage::disk('public'))->open($video->path)->export()
@@ -126,7 +122,7 @@ class Video extends Model
     }
 
 
-    private static function getFormatWithBitrate($format, $bitrate = null) {
+    public static function getFormatWithBitrate($format, $bitrate = null) {
         return match ($bitrate) {
             '250' => (new $format)->setKiloBitrate(250),
             '500' => (new $format)->setKiloBitRate(500),
@@ -134,5 +130,13 @@ class Video extends Model
             '1000' => (new $format)->setKiloBitRate(1000),
             default => (new $format),
         };
+    }
+
+    public static function formatarTempo($segundos) {
+        $horas = floor($segundos / 3600);
+        $minutos = floor(($segundos % 3600) / 60);
+        $segundos = round($segundos % 60, 2); // Arredonda os segundos para duas casas decimais
+
+        return sprintf('%02d:%02d:%05.2f', $horas, $minutos, $segundos);
     }
 }

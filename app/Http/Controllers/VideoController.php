@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
+use League\Csv\Writer;
+use Illuminate\Support\Collection;
 
 class VideoController extends Controller {
 
@@ -94,6 +96,11 @@ class VideoController extends Controller {
                 'nullable',
                 'numeric',
                 Rule::in(['360', '480', '720', '1080'])
+            ],
+            'bitrate' => [
+                'nullable',
+                'numeric',
+                Rule::in(['250','500', '750', '1000'])
             ]
         ]);
 
@@ -124,5 +131,31 @@ class VideoController extends Controller {
             return $returnFormat. $returnCompress . $returnBitrate . "Execution time of script = ".$ffmpegResponse['executionTime']." sec";
         }
         return back()->with('error','Não é possível converter ou comprimir o vídeo');
+    }
+
+    public function export($id) {
+        $video = Video::where('id', $id)->select('video.name')->first();
+        $benchmarks = Benchmark::getBenchmarksByVideoId($id);
+
+        $csvData = [];
+        $csvData[] = ['Benchmark ID', 'Benchmark Name', 'New Size', 'New Format',  'Old Format', 'Bitrate', 'Time Spent', 'Quality', 'Old Size'];
+
+        foreach ($benchmarks as $b) {
+            $csvData[] = [
+                $b->id, $b->name, $b->size, $b->format, $b->old_format, $b->bitrate, $b->time_spent, $b->quality, $b->old_size
+            ];
+        }
+
+        $csvContent = '';
+        foreach ($csvData as $row) {
+            $csvContent .= implode(',', $row) . "\n";
+        }
+
+        $filename = $video->name . '.csv';
+        $filePath = 'benchmarks/' . $filename;
+
+        Storage::disk('public')->put($filePath, $csvContent);
+
+        return response()->download(storage_path('app/public/'.$filePath));
     }
 }

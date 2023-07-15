@@ -13,15 +13,14 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+Route::pattern('id', '\d+');
 
-Route::get('/', [VideoController::class, 'index' ]);
-
-Route::post('/upload', [VideoController::class, 'uploadVideo' ]);
-
-Route::get('/remove/{id}', [VideoController::class, 'delete' ]);
-
-Route::get('/test/{id}', [VideoController::class, 'test' ]);
-
-
-Route::post('/convert', [VideoController::class, 'convert']);
+Route::controller(VideoController::class)->group(function() {
+    Route::get('/', 'index');
+    Route::post('/upload', 'uploadVideo');
+    Route::get('/remove/{id}', 'delete');
+    Route::get('/test/{id}','test');
+    Route::post('/convert','convert');
+    Route::get('/export/{id}', 'export');
+});
 
